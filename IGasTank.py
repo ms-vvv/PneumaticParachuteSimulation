@@ -31,7 +31,6 @@ class IGasTank(ABC):
             "density": []
         };
 
-
     def appendHistory(self, time: float) -> None:
         self._history["time"].append(time);
         self._history["pressure"].append(self._pressureOfGas);
@@ -39,17 +38,23 @@ class IGasTank(ABC):
         self._history["mass"].append(self._massOfGas);
         self._history["density"].append(self._densityOfGas);
 
-    def changeMassOfGasInTank(self, massOfGasWhichIsMovedToTank: float) -> None:
+    def incrementMassOfGas(self, massOfGasWhichIsMovedToTank: float) -> None:
         self._massOfGas += massOfGasWhichIsMovedToTank;
 
     def calculateDensityOfGas(self) -> None:
+        if self._volumeOfGas == 0:
+            self._densityOfGas = 0;
+            return
         self._densityOfGas = self._massOfGas / self._volumeOfGas;
 
-    def calculateTemperatureInsideTank(self) -> None:
+    def calculateTemperatureOfGas(self) -> None:
         max_number_of_iterations: int = 100;
         accepted_error: float = 1e-5;
         initial_temperature: float = self._temperatureOfGas;
         error: float = accepted_error+1;
+
+        if self._volumeOfGas == 0:
+            return
 
         constant_pressure_part_stuff: float = (self._densityOfGas * self._specificGasConstant)/self._pressureOfGas;
 
@@ -69,7 +74,7 @@ class IGasTank(ABC):
 
         raise(IterationNotConverged(error, initial_temperature, i))
 
-    def calculatePressureInsideTank(self) -> None:
+    def calculatePressureOfGas(self) -> None:
         self._pressureOfGas = self._densityOfGas * self._specificGasConstant * self._temperatureOfGas;
 
     def getPressure(self) -> float:
@@ -80,3 +85,6 @@ class IGasTank(ABC):
 
     def getDensity(self) -> float:
         return self._densityOfGas;
+
+    def getHistory(self) -> Dict[str, List[float]]:
+        return self._history

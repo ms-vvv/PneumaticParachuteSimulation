@@ -2,7 +2,7 @@ from IValve import IValve
 from Cylinder import Cylinder
 from Tank import Tank
 from IHeatCapacityRatio import IHeatCapacityRatio;
-
+from typing import Dict, List
 
 class ValveWithCompressibleFlow(IValve):
 
@@ -16,8 +16,13 @@ class ValveWithCompressibleFlow(IValve):
         self._tank: Tank = tank;
         self._cylinder: Cylinder = cylinder;
         self._heatCapacityRatio: IHeatCapacityRatio = heatCapacityRatio;
+        self._massFlowRate: float = 0;
+        self._history: Dict[str, List[float]] = {
+            "time": [],
+            "massFlowRate": [],
+        };
 
-    def getMaxMassFlowRate(self) -> float:
+    def calculateMaxMassFlowRate(self) -> None:
         heat_capacity_ratio: float = self._heatCapacityRatio.getHeatCapacityRatio(
             0.5 * (self._tank.getTemperature() + self._cylinder.getTemperature()));
 
@@ -30,4 +35,14 @@ class ValveWithCompressibleFlow(IValve):
                                        * (1 - pressure_ratio ** heat_ratio_part)
                                        ) ** 0.5);
 
-        return max_mass_flow_rate
+        self._massFlowRate = max_mass_flow_rate
+
+    def getMaxMassFlowRate(self) -> float:
+        return self._massFlowRate
+
+    def appendHistory(self, time: float) -> None:
+        self._history["time"].append(time);
+        self._history["massFlowRate"].append(self._massFlowRate);
+
+    def getHistory(self) -> Dict[str, List[float]]:
+        return self._history

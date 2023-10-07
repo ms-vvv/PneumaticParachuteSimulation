@@ -5,7 +5,7 @@ from IHeatCapacityRatio import IHeatCapacityRatio;
 class Cylinder(IGasTank):
     """Class representing part of the system with piston"""
     def __init__(self, initialPressure: float,
-                 tankInitialVolume: float,
+                 tankInitialVolume: float,  # Volume at zero position
                  initialTemperature: float,
                  initialMassOfGas: float,
                  specificGasConstant: float,
@@ -27,7 +27,7 @@ class Cylinder(IGasTank):
         self._pistonAcceleration: float = 0;
         self._pistonVelocity: float = initialPistonVelocity
         self._pistonLength: float = pistonLength
-        self._isOutOfPiston: bool = False
+        self._tankInitialVolume: float = tankInitialVolume
         self._history = {
             "pistonPosition": [],
             "pistonVelocity": [],
@@ -46,16 +46,24 @@ class Cylinder(IGasTank):
     def getPistonPosition(self) -> float:
         return self._pistonPosition
 
-    def pistonHasLeftTheCylinder(self) -> None:
-        self._isOutOfPiston = True;
+    def getPistonVelocity(self) -> float:
+        return self._pistonVelocity
+
+    def calculateVolume(self) -> None:
+        self._volumeOfGas = self._tankInitialVolume + self._pistonArea * self._pistonPosition
 
     def calculatePistonAcceleration(self, *forces: IForce) -> None:
         forces_acting_on_piston = self._pressureOfGas*self._pistonArea;
         for force in forces:
-            if self._isOutOfPiston and force.isPistonForce():
-                continue
             forces_acting_on_piston += force.getForce();
 
         self._pistonAcceleration = forces_acting_on_piston/self._pistonMass;
 
-    
+    def incrementPistonVelocity(self, VelocityIncrement: float) -> None:
+        self._pistonVelocity += VelocityIncrement;
+
+    def incrementPistonPosition(self, PositionIncrement: float) -> None:
+        self._pistonPosition += PositionIncrement;
+
+    def setPressureToZero(self) -> None:
+        self._pressureOfGas = 0;
