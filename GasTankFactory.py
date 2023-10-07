@@ -25,7 +25,8 @@ class GasTankFactory:
                          specificGasConstant: float,
                          heatCapacityRatio: IHeatCapacityRatio,
                          pistonArea: float,
-                         pistonMass: float) -> Cylinder:
+                         pistonMass: float,
+                         pistonLength: float) -> Cylinder:
 
         return Cylinder(initialPressure,
                          tankInitialVolume,
@@ -34,4 +35,5 @@ class GasTankFactory:
                          specificGasConstant,
                          heatCapacityRatio,
                          pistonArea,
-                         pistonMass);
+                         pistonMass,
+                         pistonLength);
