@@ -22,5 +22,7 @@ class SimpleDragForce(IForce):
         return False
 
     def getForce(self) -> float:
-        drag_force: float = 0.5* self._airDensity * self._dragCoefficient * self._referenceArea * self._velocity**2;
+        drag_force: float = 0.5 * self._airDensity * self._dragCoefficient * self._referenceArea * self._velocity**2;
+        if self._velocity > 0:
+            drag_force = -drag_force
         return drag_force

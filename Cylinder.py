@@ -28,11 +28,11 @@ class Cylinder(IGasTank):
         self._pistonVelocity: float = initialPistonVelocity
         self._pistonLength: float = pistonLength
         self._tankInitialVolume: float = tankInitialVolume
-        self._history = {
+        self._history.update({
             "pistonPosition": [],
             "pistonVelocity": [],
             "pistonAcceleration": [],
-        }
+        })
 
     def appendHistory(self, time: float) -> None:
         super().appendHistory(time)

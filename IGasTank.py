@@ -51,6 +51,7 @@ class IGasTank(ABC):
         max_number_of_iterations: int = 100;
         accepted_error: float = 1e-5;
         initial_temperature: float = self._temperatureOfGas;
+        last_temperature: float = initial_temperature;
         error: float = accepted_error+1;
 
         if self._volumeOfGas == 0:
@@ -64,12 +65,13 @@ class IGasTank(ABC):
             heat_ratio_part = (heat_capacity_ratio - 1)/heat_capacity_ratio;
 
             initial_temperature = self._temperatureOfGas * (constant_pressure_part_stuff * initial_temperature)**heat_ratio_part
-            error = abs(initial_temperature - self._temperatureOfGas);
+            error = abs(initial_temperature - last_temperature);
 
             if error <= accepted_error:
                 self._temperatureOfGas = initial_temperature;
                 return
 
+            last_temperature = initial_temperature
             i += 1;
 
         raise(IterationNotConverged(error, initial_temperature, i))

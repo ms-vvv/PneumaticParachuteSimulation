@@ -2,7 +2,7 @@ from ISimulation import ISimulation
 from Cylinder import Cylinder
 from Tank import Tank
 from ValveWithCompressibleFlow import ValveWithCompressibleFlow
-from IForce import ForceFactory
+from ForceFactory import ForceFactory
 from Errors.IterationErrors import IterationNotConverged
 import logging
 
@@ -15,15 +15,20 @@ class SimulationWithOneTankAndOnePiston(ISimulation):
         self._valve: ValveWithCompressibleFlow = valve;
         self._timeStep: float = 1e-3;  # [s]
 
-    def RK1_5(self, cylinder_history: dict[str, list[float]]) -> None:
+    def _RK1_5(self, cylinder_history: dict[str, list[float]], time: float) -> None:
+        time_step: float = time - cylinder_history["time"][-1]
+        previous_time_step: float = (cylinder_history["time"][-1] - cylinder_history["time"][-2])
         # Piston velocity
         self._cylinder.incrementPistonVelocity(
-            0.5 * ((((self._timeStep) / (cylinder_history["time"][-1] - cylinder_history["time"][-2])) *
-                    (cylinder_history["pistonAcceleration"][-1] - cylinder_history["pistonAcceleration"][-2])) +
-                   cylinder_history["pistonAcceleration"][-1]) * self._timeStep);
+            0.5 * (
+                    (1
+                            #(time_step / previous_time_step) *
+                           # (cylinder_history["pistonAcceleration"][-1] - cylinder_history["pistonAcceleration"][-2])
+                    ) + 2 * cylinder_history["pistonAcceleration"][-1]
+                   ) * time_step);
         # Piston movement
         self._cylinder.incrementPistonPosition(
-            0.5 * (self._cylinder.getPistonVelocity() + cylinder_history["pistonVelocity"][-1]) * self._timeStep);
+            0.5 * (self._cylinder.getPistonVelocity() + cylinder_history["pistonVelocity"][-1]) * time_step);
 
     def runSimulation(self, endTime: float, startTime: float = 0) -> None:
 
@@ -54,9 +59,9 @@ class SimulationWithOneTankAndOnePiston(ISimulation):
         cylinder_history = self._cylinder.getHistory();
         valve_history = self._valve.getHistory()
 
-        while time < endTime or self._cylinder.getPistonLength() < self._cylinder.getPistonPosition():
+        while time <= endTime and self._cylinder.getPistonLength() > self._cylinder.getPistonPosition():
 
-            self.RK1_5(cylinder_history)
+            self._RK1_5(cylinder_history, time)
 
             # New volume after piston moved
             self._cylinder.calculateVolume();
@@ -89,15 +94,24 @@ class SimulationWithOneTankAndOnePiston(ISimulation):
             drag_force.setVelocity(rocket_speed_at_deployment + self._cylinder.getPistonVelocity())
             self._cylinder.calculatePistonAcceleration(drag_force)
 
+            self._tank.appendHistory(time)
+            self._cylinder.appendHistory(time)
+            self._valve.appendHistory(time)
+
             time += self._timeStep;
 
+        # Piston now is pushed out of cylinder
         self._timeStep = 1e-2
         self._cylinder.setPressureToZero();
 
-        while time < endTime:
-            self.RK1_5(cylinder_history)
+        while time <= endTime:
+            self._RK1_5(cylinder_history, time)
             # Calculating acceleration of the piston
             drag_force.setVelocity(rocket_speed_at_deployment + self._cylinder.getPistonVelocity())
             self._cylinder.calculatePistonAcceleration(drag_force)
+
+            self._tank.appendHistory(time)
+            self._cylinder.appendHistory(time)
+            self._valve.appendHistory(time)
 
             time += self._timeStep;

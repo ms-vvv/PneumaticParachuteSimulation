@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from DragForces import SimpleDragForce
+
 
 class IForce(ABC):
 
@@ -11,8 +11,3 @@ class IForce(ABC):
     def isPistonForce(self) -> bool:
         pass;
 
-
-class ForceFactory:
-
-    def getSimpleDragForce(self, dragCoefficient: float, referenceArea: float) -> SimpleDragForce:
-        return SimpleDragForce(dragCoefficient, referenceArea);
