@@ -1,5 +1,5 @@
-from Cylinder import Cylinder
-from IHeatCapacityRatio import IHeatCapacityRatio;
+from Tanks.Cylinder import Cylinder
+from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 from Tank import Tank;
 
 

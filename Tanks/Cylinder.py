@@ -1,6 +1,6 @@
-from IForce import IForce
+from Forces.IForce import IForce
 from IGasTank import IGasTank
-from IHeatCapacityRatio import IHeatCapacityRatio;
+from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 
 class Cylinder(IGasTank):
     """Class representing part of the system with piston"""

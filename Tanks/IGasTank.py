@@ -1,5 +1,5 @@
 from abc import ABC;
-from IHeatCapacityRatio import IHeatCapacityRatio;
+from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 from Errors.IterationErrors import IterationNotConverged
 from typing import Dict, List
 

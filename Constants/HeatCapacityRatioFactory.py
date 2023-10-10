@@ -1,4 +1,4 @@
-from HeatCapacityRatio import CO2HeatCapacityRatio
+from Constants.HeatCapacityRatio import CO2HeatCapacityRatio
 
 
 class HeatCapacityRatioFactory:

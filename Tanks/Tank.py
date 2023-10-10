@@ -1,4 +1,4 @@
-from IGasTank import IGasTank
+from Tanks.IGasTank import IGasTank
 
 
 class Tank(IGasTank):

@@ -1,8 +1,8 @@
 from ISimulation import ISimulation
-from Cylinder import Cylinder
-from Tank import Tank
-from ValveWithCompressibleFlow import ValveWithCompressibleFlow
-from ForceFactory import ForceFactory
+from Tanks.Cylinder import Cylinder
+from Tanks.Tank import Tank
+from Valves.ValveWithCompressibleFlow import ValveWithCompressibleFlow
+from Forces.ForceFactory import ForceFactory
 from Errors.IterationErrors import IterationNotConverged
 import logging
 
@@ -13,7 +13,7 @@ class SimulationWithOneTankAndOnePiston(ISimulation):
         self._tank: Tank = tank;
         self._cylinder: Cylinder = cylinder;
         self._valve: ValveWithCompressibleFlow = valve;
-        self._timeStep: float = 1e-3;  # [s]
+        self._timeStep: float = 1e-6;  # [s]
 
     def _RK1_5(self, cylinder_history: dict[str, list[float]], time: float) -> None:
         time_step: float = time - cylinder_history["time"][-1]

@@ -1,7 +1,7 @@
 from ValveWithCompressibleFlow import ValveWithCompressibleFlow
-from Cylinder import Cylinder
-from Tank import Tank
-from IHeatCapacityRatio import IHeatCapacityRatio;
+from Tanks.Cylinder import Cylinder
+from Tanks.Tank import Tank
+from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 
 
 class ValveFactory:

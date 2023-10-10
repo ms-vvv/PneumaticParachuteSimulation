@@ -1,7 +1,7 @@
 from IValve import IValve
-from Cylinder import Cylinder
-from Tank import Tank
-from IHeatCapacityRatio import IHeatCapacityRatio;
+from Tanks.Cylinder import Cylinder
+from Tanks.Tank import Tank
+from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 from typing import Dict, List
 
 class ValveWithCompressibleFlow(IValve):
@@ -23,6 +23,10 @@ class ValveWithCompressibleFlow(IValve):
         };
 
     def calculateMaxMassFlowRate(self) -> None:
+        if self._cylinder.getPressure() > self._tank.getPressure():
+            self._massFlowRate = 0;
+            return
+
         heat_capacity_ratio: float = self._heatCapacityRatio.getHeatCapacityRatio(
             0.5 * (self._tank.getTemperature() + self._cylinder.getTemperature()));
 
@@ -34,7 +38,6 @@ class ValveWithCompressibleFlow(IValve):
                                     * (2 * self._tank.getPressure() * (heat_ratio_part ** (-1)) * self._tank.getDensity()
                                        * (1 - pressure_ratio ** heat_ratio_part)
                                        ) ** 0.5);
-
         self._massFlowRate = max_mass_flow_rate
 
     def getMaxMassFlowRate(self) -> float:

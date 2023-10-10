@@ -1,4 +1,4 @@
-from DragForces import SimpleDragForce
+from Forces.DragForces import SimpleDragForce
 
 
 class ForceFactory:
