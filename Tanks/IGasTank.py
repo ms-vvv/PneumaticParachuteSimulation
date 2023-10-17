@@ -2,9 +2,10 @@ from abc import ABC;
 from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 from Errors.IterationErrors import IterationNotConverged
 from typing import Dict, List
+from IHistorable import IHistorable
 
 
-class IGasTank(ABC):
+class IGasTank(ABC, IHistorable):
     """Class defining basic model of pressurized tank"""
     __Vector = list[float];
     def __init__(self,
