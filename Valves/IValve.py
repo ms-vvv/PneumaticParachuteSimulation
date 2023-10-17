@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod;
 from typing import Dict, List
+from IHistorable import IHistorable
 
 
-class IValve(ABC):
+class IValve(ABC, IHistorable):
     """Class defining basic model of valve between tanks"""
 
     def __init__(self) -> None:
