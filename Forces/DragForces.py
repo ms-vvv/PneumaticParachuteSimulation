@@ -1,4 +1,4 @@
-from IForce import IForce
+from Forces.IForce import IForce
 
 
 class SimpleDragForce(IForce):

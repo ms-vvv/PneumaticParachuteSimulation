@@ -1,5 +1,5 @@
 from Forces.IForce import IForce
-from IGasTank import IGasTank
+from Tanks.IGasTank import IGasTank
 from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
 
 class Cylinder(IGasTank):

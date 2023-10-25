@@ -1,4 +1,4 @@
-from IValve import IValve
+from Valves.IValve import IValve
 from Tanks.Cylinder import Cylinder
 from Tanks.Tank import Tank
 from Constants.IHeatCapacityRatio import IHeatCapacityRatio;
